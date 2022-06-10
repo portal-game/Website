@@ -8,15 +8,18 @@
 
 <body>
 
-	<form>
-		<h1>Log In</h1>
-		<p>Username</p>
-		<input type="username" id = "password" placeholder="Username" onkeydown="submit(this)"/>
-		<p>Password</p>
-		<input type="password" id = "password" placeholder="send a message" onkeydown="submit(this)"/>
-	</form>
-	
+	<h1>Sign In</h1>
+
+	<p>Username or Email Address</p>
+	<input id = "auth-user" type = "username" value = "eee"/>
+
+	<p>Password</p>
+	<input id = "auth-pwd" type = "password" value = "eee"/>
+
+	<button id = "auth-login">Sign In</button>
+
 	<script src = "Resources/Scripts/data-manager.js"></script>
+	<script src = "Resources/Scripts/login.js"></script>
 </body>
 
 </html>

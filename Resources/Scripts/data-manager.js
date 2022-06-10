@@ -1,43 +1,50 @@
 /*
-setup.js
-This script is used to get all of the data needed to setup
-the website at runtime. Some perivate data cannot be found
-if the user is not authenticated already. Authnetication
-status should be checked for via cookies.
+data-manager.js
+Rohith Vishwajith (EID: rv24456)
 */
 
-// startURL - The URL of the file which stores the URLs of
-// the important public files so they can easily be updated
-// if/when necessary.
+/*
+Async foreach allows waiting for the execution of a foreach to complete
+and then calling it with then()
+*/
+
+Object.defineProperty(Array.prototype, "asyncForEach", {
+    enumerable: false, value: function(task) {
+        return new Promise((resolve, reject) => {
+            this.forEach(function(item, index, array){
+                task(item, index, array);
+                if(Object.is(array.length - 1, index)) {resolve({ status: 'finished', count: array.length })}
+            });
+        })
+    }
+});
 
 run();
 
 async function run() {
-    const startURL = "https://raw.githubusercontent.com/rvishwajith/PortalPublicData/main/URLs.txt";
-    let startLines = (await getText(startURL)).split("\n");
+    const url = "https://raw.githubusercontent.com/portal-game/Data/main/Main.txt";
+    let lines = await getLines(url);
+    lines.asyncForEach((line) => {
+        if(line.startsWith("@ServerFile:")) { parseServerFile(line.replace("@ServerFile:", "").trim()); }
+    })
+}
 
-    let serverURLs = []
-
-    for(let i = 0; i < startLines.length; i++) {
-        if(startLines[i].startsWith("@ServerFile")) {
-            let url = startLines[i].replace("@ServerFile:", "").trim();
-            serverURLs.push(url);
+async function parseServerFile(url) {
+    let lines = await getLines(url);
+    lines.forEach((line) => {
+        if(line.startsWith("@Server")) {
+            line = line.replace("@Server:", "").replace("}", "").replace("{", "").trim();
+            let data = line.split(",");
+            let ip = data[0].trim(), name = data[1].trim();
+            console.log("IP: " + ip + " Name: " + name);
         }
-    }
+    })
 }
 
-
-
-
-
-
-/*
- * GetText() - Get a file at the given url. Must either be
- * a public github file or CORS-enabled.
- * 
- * Call with await() and use in async functions.
- */
-async function getText(url) {
+async function getLines(url) {
     const file = await fetch(url);
-    return await file.text();
+    const text = await file.text();
+    return text.split("\n");
 }
+
+$('')
