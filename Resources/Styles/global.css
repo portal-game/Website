@@ -1,0 +1,21 @@
+@font-face {
+	font-family: ProductSans;
+	src: url("Fonts/ProductSansRegular.ttf");
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: ProductSans;
+	src: url("Fonts/ProductSansBold.ttf");
+	font-weight: bold;
+}
+
+html {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+}
